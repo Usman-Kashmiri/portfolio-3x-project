@@ -1,0 +1,23 @@
+/* setting initial margin & padding */
+
+* {
+    margin: 0;
+    padding: 0;
+    list-style: none;
+    box-sizing: border-box;
+}
+
+/* Global CSS Variables */
+
+:root {
+ --cyan: #50EFD2;
+ --cyanDark:#13A48A;
+ --width100: 100vw;
+ --height100: 100vh;
+}
+
+main {
+    background: linear-gradient(90deg,var(--cyan)50%,var(--cyanDark));
+    min-width: var(--width100);
+    min-height: var(--height100);
+}

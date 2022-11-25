@@ -10,7 +10,7 @@
 
 <body>
 
-  <div class="container">
+  <div id="calculationContainer" class="container">
     <h1>Currency Converter</h1>
       <div class="row">
         <div class="col">
@@ -23,13 +23,21 @@
           <select name="currency" class="currency">
             <!-- <option value="USD">U. S. Dollar / USD</option> -->
           </select>
-          <input type="text" name="" id="output_currency" disabled>
+          <!-- <input type="text" name="" id="output_currency" disabled> -->
         </div>
       </div>
       <button onClick="convert()">Convert</button>
   </div>
+  <div id="resultContainer" class="container">
+    <h1>Conversion Result:</h1>
+    <h2 style="text-align: center;"><span id="conversionAmount"></span></h2>
+    <h2>Current Exchange Rate: <span id="exchangeRate"></span></h2>
+    <h2>Calculation Time: <span id="timeStamp"></span></h2>
+    <h2>Last Exchange Rate Update: <span id="updateTime"></span></h2>
+    <button onclick="goBack()">Back</button>
+</div>
 
-  <script type="text/javascript" src="js/script.js"></script>
+  <script src="js/script.js"></script>
 </body>
 
 </html>

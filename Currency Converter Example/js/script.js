@@ -9,7 +9,8 @@ var select = document.querySelectorAll(".currency"),
     conversionAmount = document.getElementById('conversionAmount'),
     exchangeRate = document.getElementById('exchangeRate'),
     calculationTimeSpan = document.getElementById('timeStamp'),
-    updateTime = document.getElementById('updateTime');
+    updateTime = document.getElementById('updateTime'),
+    conversionError = document.getElementById('conversionError');
 
 
 calculationContainer.style.display = "block";
@@ -69,7 +70,7 @@ function convert() {
         day: "numeric",
         hour: "numeric",
         minute: "numeric"
-      };
+    };
     // var calculationTime = new timeStamp;
     var value1 = select[0].value;
     var value2 = select[1].value;
@@ -77,34 +78,42 @@ function convert() {
     var fromCurrency = entries[value1];
     var toCurrency = entries[value2];
     var fromCurrencyCode,
-    toCurrencyCode = toCurrency[1].code,
-    exchangeRateValue = toCurrency[1].rate,
-    RateUpdateTime = toCurrency[1].date;
+        toCurrencyCode,
+        exchangeRateValue,
+        RateUpdateTime;
+        conversionError.innerText = "";
     if (input_currency.value <= 0) {
-        alert("Amount cannot be negative or zero!")
-    } else if (input_currency.value > 1000000000) {
-        alert("Conversion amount cannot be great than 1Billon!")
+        conversionError.innerText = `Amount cannot be negative or zero!`
+    } else if (input_currency.value > 100000000) {
+        conversionError.innerText = `Conversion amount cannot be great than 100 Million!`
     } else if (value1 == value2) {
-        alert("Please select two different currencies")
+        conversionError.innerText = `Please select two different currencies`
     } else if (value1 == "149") {
         calculation = toCurrency[1].rate * input_currency_val;
         fromCurrencyCode = "GBP";
         toCurrencyCode = toCurrency[1].code;
         exchangeRateValue = toCurrency[1].rate;
-        // RateUpdateTime = toCurrency[1].date;
-    }
-    else if (value2 == "149") {
+        RateUpdateTime = toCurrency[1].date;
+        // conversionError.innerText = "";
+    } else if (select[1].value == "149") {
         calculation = fromCurrency[1].inverseRate * input_currency_val;
         fromCurrencyCode = fromCurrency[1].code;
         toCurrencyCode = "GBP";
-        exchangeRateValue = toCurrency[1].innverseRate;
-        // RateUpdateTime = toCurrency[1].date;
+        exchangeRateValue = fromCurrency[1].inverseRate;
+        RateUpdateTime = fromCurrency[1].date;
+        // conversionError.innerText = "";
     } else {
         calculation = toCurrency[1].rate / fromCurrency[1].rate * input_currency_val;
         fromCurrencyCode = fromCurrency[1].code;
+        toCurrencyCode = toCurrency[1].code;
+        exchangeRateValue = toCurrency[1].rate;
+        RateUpdateTime = toCurrency[1].date;
+        // conversionError.innerText = "";
     }
-    calculationContainer.style.display = "none";
-    resultContainer.style.display = "block";
+    if (calculation) {
+        calculationContainer.style.display = "none";
+        resultContainer.style.display = "block";
+    }
     conversionAmount.innerText = `${input_currency_val} ${fromCurrencyCode} = ${roundOff(calculation)} ${toCurrencyCode}`;
     exchangeRate.innerText = `1 ${fromCurrencyCode} = ${roundOff(exchangeRateValue)} ${toCurrencyCode}`;
     calculationTimeSpan.innerText = `${calculationTime.toLocaleString("en-GB", options)}`

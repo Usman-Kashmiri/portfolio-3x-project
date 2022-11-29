@@ -24,7 +24,7 @@ fetch('http://www.floatrates.com/daily/gbp.json')
     .then((data) => data.json())
     .then((data) => {
         entries = Object.entries(data);
-        console.log(entries)
+        // console.log(entries)
         for (var i = 0; i < entries.length; i++) {
             select[0].innerHTML += `<option value="${i}">${entries[i][1].name} / ${entries[i][1].code}</option>`;
             select[1].innerHTML += `<option value="${i}" id="option_${i}">${entries[i][1].name} / ${entries[i][1].code}</option>`;

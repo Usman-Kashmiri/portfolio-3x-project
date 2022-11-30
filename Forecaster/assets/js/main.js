@@ -26,7 +26,7 @@ forcast_mode_btn.onclick = () => {
 
 async function fetchData() {
     var index = 1;
-    const url = `assets/js/data.json`;
+    const url = `assets/js/fuelCostData.json`;
     const response = await fetch(url);
     const data = await response.json();
     // console.log(data.fuelCostData[index])
@@ -36,18 +36,94 @@ async function fetchData() {
 function getValue() {
 
     fetchData().then(data => {
-        var index = 0;
-        if (yearInputField.value == 1996) {
-            index = 0;
-        }
-        else if (yearInputField.value == 1997) {
-            index = 1;
-        }
-        else if (yearInputField.value == 1998) {
-            index = 2;
-        }
-        else if (yearInputField.value == 1999) {
-            index = 3;
+        var index;
+        
+        switch (yearInputField.value) {
+            case '1996':
+                index = 0;
+                break;
+            case '1997':
+                index = 1;
+                break;
+            case '1998':
+                index = 2;
+                break;
+            case '1999':
+                index = 3;
+                break;
+            case '2000':
+                index = 4;
+                break;
+            case '2001':
+                index = 5;
+                break;
+            case '2002':
+                index = 6;
+                break;
+            case '2003':
+                index = 7;
+                break;
+            case '2004':
+                index = 8;
+                break;
+            case '2005':
+                index = 9;
+                break;
+            case '2006':
+                index = 10;
+                break;
+            case '2007':
+                index = 11;
+                break;
+            case '2008':
+                index = 12;
+                break;
+            case '2009':
+                index = 13;
+                break;
+            case '2010':
+                index = 14;
+                break;
+            case '2011':
+                index = 15;
+                break;
+            case '2012':
+                index = 16;
+                break;
+            case '2013':
+                index = 17;
+                break;
+            case '2014':
+                index = 18;
+                break;
+            case '2015':
+                index = 19;
+                break;
+            case '2016':
+                index = 20;
+                break;
+            case '2017':
+                index = 21;
+                break;
+            case '2018':
+                index = 22;
+                break;
+            case '2019':
+                index = 23;
+                break;
+            case '2020':
+                index = 24;
+                break;
+            case '2021':
+                index = 25;
+                break;
+            case '2022':
+                index = 26;
+                break;
+
+            default:
+                index = 0;
+                break;
         }
 
         const years = data.fuelCostData.map(
@@ -88,16 +164,16 @@ function getValue() {
 
 function drawMonthwiseChart(years, months, D7DW, D7DU, D7DT, D7DV) {
     var data = new google.visualization.DataTable();
-    if (yearInputField.value < 1996 || yearInputField.value > 1999) {
-        data.addColumn({ label: 'Month', type: 'string' });
-        data.addColumn({ label: 'Cost', type: 'number' });
+    if (yearInputField.value < 1996 || yearInputField.value > 2022) {
+        data.addColumn({ label: 'months', type: 'string' });
+        data.addColumn({ label: 'cost', type: 'number' });
         data.addColumn({ role: 'annotation', type: 'string' });
         // data.addColumn('string', 'msg');
         data.addRows([
             ['', 0, 'No Data Available']
         ]);
     } else {
-        data.addColumn('string', 'Month');
+        data.addColumn('string', 'Months');
         data.addColumn('number', 'Solid Fuels');
         data.addColumn('number', 'Gas');
         data.addColumn('number', 'Electricity');
@@ -146,7 +222,7 @@ function drawMonthwiseChart(years, months, D7DW, D7DU, D7DT, D7DV) {
             format: 'decimal'
         },
         hAxis: {
-            title: 'Month'
+            title: 'Months'
         },
         height: 600,
         colors: ['#41DA96', '#E6AC2B', '#71EB92', '#FAAFF9']

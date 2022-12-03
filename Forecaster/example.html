@@ -8,163 +8,102 @@
 </head>
 
 <body>
-    <br /><br />
-    <div class="container">
-        <h3 align="center">Create Dynamic Column Chart using PHP Ajax with Google Charts</h3>
-        <br />
-
-        <div class="panel panel-default">
-            <div class="panel-heading">
-                <div class="row">
-                    <div class="col-md-9">
-                        <h3 class="panel-title">Month Wise Profit Data</h3>
-                    </div>
-                    <div class="col-md-3">
-                        <input type="number" id="year" value="1996" onchange="getValue()">
-                    </div>
-                </div>
-            </div>
-            <div class="panel-body">
-                <div id="chart_area" style="width: 1000px; height: 620px;"></div>
-            </div>
-        </div>
-    </div>
+    <input class="series-chk" id="chk-0" type="checkbox" value="1" checked /><label for="chk-0">Column 1</label>
+    <input class="series-chk" id="chk-1" type="checkbox" value="2" checked /><label for="chk-1">Column 2</label>
+    <input class="series-chk" id="chk-2" type="checkbox" value="3" checked /><label for="chk-2">Column 3</label>
+    <input class="series-chk" id="chk-3" type="checkbox" value="4" checked /><label for="chk-3">Column 4</label>
+    <input class="series-chk" id="chk-4" type="checkbox" value="5" checked /><label for="chk-4">Column 5</label>
+    <div id="line_top_x"></div>
 </body>
 
 </html>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
 <script type="text/javascript" src="https://www.gstatic.com/charts/loader.js"></script>
 <script type="text/javascript">
-    var yearInputField = document.getElementById('year');
+    google.charts.load('current', { packages: ['corechart', 'bar'] }).then(function () {
+        var jsonData = [{ "month": "February", "column1": "1", "column2": "2", "column3": "3", "column4": "4", "column5": "5" }, { "month": "March", "column1": "1", "column2": "2", "column3": "3", "column4": "4", "column5": "5" }, { "month": "April", "column1": "1", "column2": "2", "column3": "3", "column4": "4", "column5": "5" }, { "month": "May", "column1": "1", "column2": "2", "column3": "3", "column4": "4", "column5": "5" }, { "month": "June", "column1": "1", "column2": "2", "column3": "3", "column4": "4", "column5": "5" }, { "month": "July", "column1": "1", "column2": "2", "column3": "3", "column4": "4", "column5": "5" }, { "month": "August", "column1": "1", "column2": "2", "column3": "3", "column4": "4", "column5": "5" }, { "month": "September", "column1": "1", "column2": "2", "column3": "3", "column4": "4", "column5": "5" }, { "month": "October", "column1": "1", "column2": "2", "column3": "3", "column4": "4", "column5": "5" }, { "month": "November", "column1": "1", "column2": "2", "column3": "3", "column4": "4", "column5": "5" }, { "month": "December", "column1": "1", "column2": "2", "column3": "3", "column4": "4", "column5": "5" }, { "month": "Total", "column1": "1", "column2": "2", "column3": "3", "column4": "4", "column5": "5" }, {}];
 
-    google.charts.load('current', { packages: ['corechart', 'bar'] });
-    google.charts.setOnLoadCallback();
+        // create blank data table
+        var data = new google.visualization.DataTable();
 
-    async function fetchData() {
-        var index = 1;
-        const url = `assets/js/data.json`;
-        const response = await fetch(url);
-        const data = await response.json();
-        // console.log(data.fuelCostData[index])
-        return data;
-    }
-
-    function getValue() {
-
-        fetchData().then(data => {
-            var index = 0;
-            if (yearInputField.value == 1996) {
-                index = 0;
-            }
-            else if (yearInputField.value == 1997) {
-                index = 1;
+        // parse json
+        jsonData.forEach(function (jsonRow, indexRow) {
+            // add columns
+            if (indexRow === 0) {
+                for (var column in jsonRow) {
+                    if (column === 'month') {
+                        data.addColumn('string', column);
+                    } else {
+                        data.addColumn('number', column);
+                    }
+                }
             }
 
-            const years = data.fuelCostData.map(
-                function (index) {
-                    return index.year;
+            // add row
+            var dataRow = [];
+            for (var column in jsonRow) {
+                if (column === 'month') {
+                    dataRow.push(jsonRow[column]);
+                } else {
+                    // convert string to number
+                    dataRow.push(parseFloat(jsonRow[column]));
                 }
-            );
-            const months = data.fuelCostData[index].record.map(
-                function (index) {
-                    return index.month;
-                }
-            );
-            const D7DW = data.fuelCostData[index].record.map(
-                function (index) {
-                    return index.D7DW;
-                }
-            );
-            const D7DU = data.fuelCostData[index].record.map(
-                function (index) {
-                    return index.D7DU;
-                }
-            );
-            const D7DT = data.fuelCostData[index].record.map(
-                function (index) {
-                    return index.D7DT;
-                }
-            );
-            const D7DV = data.fuelCostData[index].record.map(
-                function (index) {
-                    return index.D7DV;
-                }
-            );
-            // console.log(years, months, D7DW, D7DU, D7DT, D7DV)
-            drawMonthwiseChart(years, months, D7DW, D7DU, D7DT, D7DV)
+            }
+            if (dataRow.length > 0) {
+                data.addRow(dataRow);
+            }
         });
 
-    }
+        var colors = ['red', 'yellow', 'green', 'blue', 'purple'];
+        colors.forEach(function (color, index) {
+            data.setColumnProperty(index + 1, 'color', color);
+        });
 
-    function drawMonthwiseChart(years, months, D7DW, D7DU, D7DT, D7DV) {
-        var data = new google.visualization.DataTable();
-        if (yearInputField.value < 1996 || yearInputField.value > 1997) {
-            data.addColumn({ label: 'Month', type: 'string' });
-            data.addColumn({ label: 'Cost', type: 'number' });
-            data.addColumn({ role: 'annotation', type: 'string' });
-            // data.addColumn('string', 'msg');
-            data.addRows([
-                ['', 0, 'No Data Available']
-            ]);
-        } else {
-            data.addColumn('string', 'Month');
-            data.addColumn('number', 'D7DW');
-            data.addColumn('number', 'D7DU');
-            data.addColumn('number', 'D7DT');
-            data.addColumn('number', 'D7DV');
-            var month;
-            var d7dw;
-            var d7du;
-            var d7dt;
-            var d7dv;
-
-            months.forEach((i) => {
-                month = i;
-                D7DW.forEach((i) => {
-                    d7dw = parseFloat(i);
-                });
-                D7DU.forEach((i) => {
-                    d7du = parseFloat(i);
-                });
-                D7DT.forEach((i) => {
-                    d7dt = parseFloat(i);
-                });
-                D7DV.forEach((i) => {
-                    d7dv = parseFloat(i);
-                });
-                data.addRows([[month, d7dw, d7du, d7dt, d7dv]]);
-                // console.log([[month, d7dw, d7du]]);
-            });
-        }
-        
         var options = {
-            title: 'Fuel Cost History',
-            annotations: {
-                stem: {
-                    color: 'transparent',
-                    length: 180
-                },
-                textStyle: {
-                    color: 'red',
-                    fontSize: 32
-                }
+            chartArea: {
+                top: 12,
+                right: 0,
+                bottom: 72,
+                left: 72
+            },
+            legend: {
+                position: 'bottom'
+            },
+            colors: colors,
+            hAxis: {
+                slantedText: true
             },
             vAxis: {
-                title: 'Cost',
-                minValue: 0,
-                maxValue: 70,
-                format: 'decimal'
+                ticks: [0, 1, 2, 3, 4, 5],
+                title: 'Amount'
             },
-            hAxis: {
-                title: 'Month'
+            bar: {
+                groupWidth: '90%'
             },
-            height: 600,
-            colors: ['#41DA96', '#71EB92', '#E6AC2B', '#FAAFF9']
+            height: 400
         };
 
+        var chart = new google.visualization.ColumnChart(document.getElementById('line_top_x'));
 
-        var chart = new google.visualization.ColumnChart(document.getElementById('chart_area'));
-        chart.draw(data, options);
-    }
+        $('.series-chk').on('change', drawChart);
+        drawChart();
 
-    getValue()
+        function drawChart() {
+            var chartColors = [];
+            var chartColumns = [0];
+            var view = new google.visualization.DataView(data);
+
+            $.each($('.series-chk'), function (index, checkbox) {
+                var seriesColumn = parseInt(checkbox.value);
+                if (checkbox.checked) {
+                    chartColumns.push(seriesColumn);
+                    chartColors.push(data.getColumnProperty(seriesColumn, 'color'));
+                }
+            });
+
+            view.setColumns(chartColumns);
+            options.colors = chartColors;
+            chart.draw(view, options);
+        }
+    });
 </script>

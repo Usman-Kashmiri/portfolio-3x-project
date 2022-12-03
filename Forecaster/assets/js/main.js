@@ -4,7 +4,12 @@ var yearInputField = document.getElementById('yearInput'),
     historical_mode = document.getElementById('historical_mode'),
     forcast_mode = document.getElementById('forcast_mode'),
     historical_mode_btn = document.getElementById('historical_mode_btn'),
-    forcast_mode_btn = document.getElementById('forcast_mode_btn');
+    forcast_mode_btn = document.getElementById('forcast_mode_btn'),
+    d7dwFilter = document.getElementById('d7dwFilter'),
+    d7duFilter = document.getElementById('d7duFilter'),
+    d7dtFilter = document.getElementById('d7dtFilter'),
+    d7dvFilter = document.getElementById('d7dvFilter'),
+    fuelFilters = document.getElementsByClassName('fuelFilters');
 
 // Default values
 
@@ -37,7 +42,7 @@ function getValue() {
 
     fetchData().then(data => {
         var index;
-        
+
         switch (yearInputField.value) {
             case '1996':
                 index = 0;
@@ -122,42 +127,84 @@ function getValue() {
                 break;
 
             default:
-                index = 0;
+                index = 26;
                 break;
         }
+
+        const dataOf22 = data.fuelCostData[26].record
+        const dataOf21 = data.fuelCostData[25].record
+        const twelveMonthsData = (dataOf21.concat(dataOf22)).slice(-12)
+        // console.log(twelveMonthsData)
 
         const years = data.fuelCostData.map(
             function (index) {
                 return index.year;
             }
         );
-        const months = data.fuelCostData[index].record.map(
-            function (index) {
-                return index.month;
-            }
-        );
-        const D7DW = data.fuelCostData[index].record.map(
-            function (index) {
-                return index.D7DW;
-            }
-        );
-        const D7DU = data.fuelCostData[index].record.map(
-            function (index) {
-                return index.D7DU;
-            }
-        );
-        const D7DT = data.fuelCostData[index].record.map(
-            function (index) {
-                return index.D7DT;
-            }
-        );
-        const D7DV = data.fuelCostData[index].record.map(
-            function (index) {
-                return index.D7DV;
-            }
-        );
-        // console.log(years, months, D7DW, D7DU, D7DT, D7DV)
-        drawMonthwiseChart(years, months, D7DW, D7DU, D7DT, D7DV)
+
+        var months, D7DW, D7DU, D7DT, D7DV;
+
+        if (index == 26) {
+            months = twelveMonthsData.map(
+                function (index) {
+                    return index.month;
+                }
+            );
+
+            D7DW = twelveMonthsData.map(
+                function (index) {
+                    return index.D7DW;
+                }
+            );
+
+            D7DU = twelveMonthsData.map(
+                function (index) {
+                    return index.D7DU;
+                }
+            );
+
+            D7DT = twelveMonthsData.map(
+                function (index) {
+                    return index.D7DT;
+                }
+            );
+
+            D7DV = twelveMonthsData.map(
+                function (index) {
+                    return index.D7DV;
+                }
+            );
+
+        } else {
+            months = data.fuelCostData[index].record.map(
+                function (index) {
+                    return index.month;
+                }
+            );
+            D7DW = data.fuelCostData[index].record.map(
+                function (index) {
+                    return index.D7DW;
+                }
+            );
+            D7DU = data.fuelCostData[index].record.map(
+                function (index) {
+                    return index.D7DU;
+                }
+            );
+            D7DT = data.fuelCostData[index].record.map(
+                function (index) {
+                    return index.D7DT;
+                }
+            );
+            D7DV = data.fuelCostData[index].record.map(
+                function (index) {
+                    return index.D7DV;
+                }
+            );
+        }
+
+        drawMonthwiseChart(years, months, D7DW, D7DU, D7DT, D7DV);
+
     });
 
 }
@@ -168,7 +215,6 @@ function drawMonthwiseChart(years, months, D7DW, D7DU, D7DT, D7DV) {
         data.addColumn({ label: 'months', type: 'string' });
         data.addColumn({ label: 'cost', type: 'number' });
         data.addColumn({ role: 'annotation', type: 'string' });
-        // data.addColumn('string', 'msg');
         data.addRows([
             ['', 0, 'No Data Available']
         ]);
@@ -199,7 +245,6 @@ function drawMonthwiseChart(years, months, D7DW, D7DU, D7DT, D7DV) {
                 d7dv = parseFloat(i);
             });
             data.addRows([[month, d7dw, d7du, d7dt, d7dv]]);
-            // console.log([[month, d7dw, d7du]]);
         });
     }
 
@@ -222,15 +267,47 @@ function drawMonthwiseChart(years, months, D7DW, D7DU, D7DT, D7DV) {
             format: 'decimal'
         },
         hAxis: {
-            title: 'Months'
+            title: 'Months',
+            slantedText: true
         },
         height: 600,
-        colors: ['#41DA96', '#E6AC2B', '#71EB92', '#FAAFF9']
+        colors: colors
     };
 
+    var colors = ['#41DA96', '#E6AC2B', '#71EB92', '#FAAFF9'];
+        colors.forEach(function (color, index) {
+            data.setColumnProperty(index + 1, 'color', color);
+        });
 
     var chart = new google.visualization.ColumnChart(document.getElementById('chart_div'));
-    chart.draw(data, options);
+
+    function drawChart() {
+        var chartColors = [];
+        var chartColumns = [0];
+        var view = new google.visualization.DataView(data);
+
+        Array.from(fuelFilters).forEach((fuelFilters) => {
+            var seriesColumn = parseInt(fuelFilters.value);
+            if (fuelFilters.checked) {
+                chartColumns.push(seriesColumn);
+                chartColors.push(data.getColumnProperty(seriesColumn, 'color'));
+                console.log(seriesColumn);
+            }
+        });
+
+        view.setColumns(chartColumns);
+        options.colors = chartColors;
+        chart.draw(view, options);
+    }
+
+    for (let index = 0; index < fuelFilters.length; index++) {
+        fuelFilters[index].onchange = () => {
+            drawChart();
+        }
+    }
+
+    drawChart();
+
 }
 
 google.charts.load('current', { packages: ['corechart', 'bar'] });

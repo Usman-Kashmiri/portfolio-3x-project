@@ -27,7 +27,17 @@
             <!-- Historical mode tab container -->
             <div id="historical_mode">
                 <h2>Fuel cost history</h2>
-                <input type="number" name="year" onchange="getValue()" value="2022" id="yearInput">
+                <input type="number" name="year" onchange="getValue()" value="2022" id="yearInput"><br><br>
+                <div class="filters">
+                    <input class="fuelFilters" id="d7dwFilter" type="checkbox" value="1" checked />
+                    <label for="d7dwFilter">Solid Fuel</label>
+                    <input class="fuelFilters" id="d7duFilter" type="checkbox" value="2" checked />
+                    <label for="d7duFilter">Gas</label>
+                    <input class="fuelFilters" id="d7dtFilter" type="checkbox" value="3" checked />
+                    <label for="d7dtFilter">Electricity</label>
+                    <input class="fuelFilters" id="d7dvFilter" type="checkbox" value="4" checked />
+                    <label for="d7dvFilter">Liquid Fuel</label>
+                </div>
                 <div id="chart_div" style="width: 100%; height: 500px;"></div>
             </div>
             <!-- Historical mode tab container -->

@@ -1,109 +1,70 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
 
 <head>
-    <title>Create Dynamic Column Chart using PHP Ajax with Google Charts</title>
-    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
-    <script src="https://code.jquery.com/jquery-1.12.4.js"></script>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <!-- Site Title -->
+    <title>Fuel Cost Forecaster</title>
+
+    <!-- Linked stylesheet -->
+    <link rel="stylesheet" href="assets/css/style.css">
 </head>
 
 <body>
-    <input class="series-chk" id="chk-0" type="checkbox" value="1" checked /><label for="chk-0">Column 1</label>
-    <input class="series-chk" id="chk-1" type="checkbox" value="2" checked /><label for="chk-1">Column 2</label>
-    <input class="series-chk" id="chk-2" type="checkbox" value="3" checked /><label for="chk-2">Column 3</label>
-    <input class="series-chk" id="chk-3" type="checkbox" value="4" checked /><label for="chk-3">Column 4</label>
-    <input class="series-chk" id="chk-4" type="checkbox" value="5" checked /><label for="chk-4">Column 5</label>
-    <div id="line_top_x"></div>
+    <main>
+        <section>
+            <!-- App title -->
+            <h1>Fuel Cost Forcaster</h1>
+            <!-- buttons for switching between modes  -->
+            <div id="tab_switch_btns">
+                <!-- button to switch to historical mode  -->
+                <button type="button" id="historical_mode_btn">History</button>
+                <!-- button to switch to forcast mode  -->
+                <button type="button" id="forcast_mode_btn">Forcast</button>
+            </div>
+            <!-- Historical mode tab container -->
+            <div id="historical_mode">
+                <h2>Fuel cost history</h2>
+                <input type="number" name="year" onchange="getValue()" value="2022" id="yearInput"><br><br>
+                <div id="historyChartsFilters">
+                    <input class="fuelFilters" type="checkbox" value="1" checked />
+                    <label for="d7dwFilter">Solid Fuel</label>
+                    <input class="fuelFilters" type="checkbox" value="2" checked />
+                    <label for="d7duFilter">Gas</label>
+                    <input class="fuelFilters" type="checkbox" value="3" checked />
+                    <label for="d7dtFilter">Electricity</label>
+                    <input class="fuelFilters" type="checkbox" value="4" checked />
+                    <label for="d7dvFilter">Liquid Fuel</label>
+                </div>
+                <div id="history_charts" style="width: 100%; height: 500px;"></div>
+            </div>
+            <!-- Historical mode tab container -->
+
+            <div id="forcast_mode">
+                <h2>Fuel cost forcast for next 12 months</h2>
+                <div id="forcastChartFilters">
+                    <input class="forcastFuelFilters" type="checkbox" value="1" checked />
+                    <label for="d7dwFilter">Solid Fuel</label>
+                    <input class="forcastFuelFilters" type="checkbox" value="2" checked />
+                    <label for="d7duFilter">Gas</label>
+                    <input class="forcastFuelFilters" type="checkbox" value="3" checked />
+                    <label for="d7dtFilter">Electricity</label>
+                    <input class="forcastFuelFilters" type="checkbox" value="4" checked />
+                    <label for="d7dvFilter">Liquid Fuel</label>
+                </div>
+                <div id="forcast_chart" style="width: 100%; height: 500px;"></div>
+            </div>
+        </section>
+    </main>
+
+    <script src="https://code.jquery.com/jquery-3.6.1.min.js"
+        integrity="sha256-o88AwQnZB+VDvE9tvIXrMQaPlFFSUTR+nldQm1LuPXQ=" crossorigin="anonymous"></script>
+    <!-- Linked Javascript -->
+    <script type="text/javascript" src="https://www.gstatic.com/charts/loader.js"></script>
+    <!-- <script type="module" src="assets/js/importJsonData.js"></script> -->
+    <script type="text/javascript" src="assets/js/example.js"></script>
 </body>
 
 </html>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
-<script type="text/javascript" src="https://www.gstatic.com/charts/loader.js"></script>
-<script type="text/javascript">
-    google.charts.load('current', { packages: ['corechart', 'bar'] }).then(function () {
-        var jsonData = [{ "month": "February", "column1": "1", "column2": "2", "column3": "3", "column4": "4", "column5": "5" }, { "month": "March", "column1": "1", "column2": "2", "column3": "3", "column4": "4", "column5": "5" }, { "month": "April", "column1": "1", "column2": "2", "column3": "3", "column4": "4", "column5": "5" }, { "month": "May", "column1": "1", "column2": "2", "column3": "3", "column4": "4", "column5": "5" }, { "month": "June", "column1": "1", "column2": "2", "column3": "3", "column4": "4", "column5": "5" }, { "month": "July", "column1": "1", "column2": "2", "column3": "3", "column4": "4", "column5": "5" }, { "month": "August", "column1": "1", "column2": "2", "column3": "3", "column4": "4", "column5": "5" }, { "month": "September", "column1": "1", "column2": "2", "column3": "3", "column4": "4", "column5": "5" }, { "month": "October", "column1": "1", "column2": "2", "column3": "3", "column4": "4", "column5": "5" }, { "month": "November", "column1": "1", "column2": "2", "column3": "3", "column4": "4", "column5": "5" }, { "month": "December", "column1": "1", "column2": "2", "column3": "3", "column4": "4", "column5": "5" }, { "month": "Total", "column1": "1", "column2": "2", "column3": "3", "column4": "4", "column5": "5" }, {}];
-
-        // create blank data table
-        var data = new google.visualization.DataTable();
-
-        // parse json
-        jsonData.forEach(function (jsonRow, indexRow) {
-            // add columns
-            if (indexRow === 0) {
-                for (var column in jsonRow) {
-                    if (column === 'month') {
-                        data.addColumn('string', column);
-                    } else {
-                        data.addColumn('number', column);
-                    }
-                }
-            }
-
-            // add row
-            var dataRow = [];
-            for (var column in jsonRow) {
-                if (column === 'month') {
-                    dataRow.push(jsonRow[column]);
-                } else {
-                    // convert string to number
-                    dataRow.push(parseFloat(jsonRow[column]));
-                }
-            }
-            if (dataRow.length > 0) {
-                data.addRow(dataRow);
-            }
-        });
-
-        var colors = ['red', 'yellow', 'green', 'blue', 'purple'];
-        colors.forEach(function (color, index) {
-            data.setColumnProperty(index + 1, 'color', color);
-        });
-
-        var options = {
-            chartArea: {
-                top: 12,
-                right: 0,
-                bottom: 72,
-                left: 72
-            },
-            legend: {
-                position: 'bottom'
-            },
-            colors: colors,
-            hAxis: {
-                slantedText: true
-            },
-            vAxis: {
-                ticks: [0, 1, 2, 3, 4, 5],
-                title: 'Amount'
-            },
-            bar: {
-                groupWidth: '90%'
-            },
-            height: 400
-        };
-
-        var chart = new google.visualization.ColumnChart(document.getElementById('line_top_x'));
-
-        $('.series-chk').on('change', drawChart);
-        drawChart();
-
-        function drawChart() {
-            var chartColors = [];
-            var chartColumns = [0];
-            var view = new google.visualization.DataView(data);
-
-            $.each($('.series-chk'), function (index, checkbox) {
-                var seriesColumn = parseInt(checkbox.value);
-                if (checkbox.checked) {
-                    chartColumns.push(seriesColumn);
-                    chartColors.push(data.getColumnProperty(seriesColumn, 'color'));
-                }
-            });
-
-            view.setColumns(chartColumns);
-            options.colors = chartColors;
-            chart.draw(view, options);
-        }
-    });
-</script>

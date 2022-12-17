@@ -1,45 +1,103 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
     <!-- Site Title -->
     <title>Currency Converter</title>
 
     <!-- Linked stylesheet -->
     <link rel="stylesheet" href="assets/css/style.css">
 </head>
+
 <body>
 
     <!-- Main -->
     <main>
+
         <!-- Section -->
-        <section>
-            <!-- Form Container -->
-            <div class="form-container">
-                <!-- main heading -->
-                <h1>Currency Converter</h1>
-                <!-- form for currency conversion -->
-                <form method="get">
-                    <div>
-                        <label for="">from:</label>
-                        <input type="text" value="U. K. Pound Sterling / GBP">
+        <section class="displayFlex flexColumn flexCenter gap20">
+
+            <!-- Calculation Input container -->
+            <div id="calculationContainer" class="displayFlex flexColumn flexCenter gap30">
+
+                <!-- Conversion limit msg -->
+                <span class="conversion-limit text-transform-capitalize">conversion limit: 100000000</span>
+
+                <div class="container displayFlex flexColumn flexCenter gap30">
+
+                    <!-- main heading -->
+                    <h1 class="text-transform-capitalize text-darkCyan">currency converter</h1>
+
+                    <!-- Calculation Input fields -->
+                    <div class="row displayFlex flexColumn gap30">
+
+                        <div class="col">
+                            <label for="">From:</label>
+                            <select name="currency" class="currency form-field shadow-glow">
+                                <option value="149">U. K. Pound Sterling / GBP</option>
+                            </select>
+                        </div>
+
+                        <div class="col">
+                            <label for="">To:</label>
+                            <select name="currency" class="currency form-field shadow-glow"></select>
+                        </div>
+
+                        <div class="col">
+                            <label for="">Amount:</label>
+                            <input type="text" class="form-field" name="" id="input_currency" value="1"
+                                autocomplete="off">
+                        </div>
+
+                        <div class="col">
+                            <!-- Convert Btn -->
+                            <button class="btn pointer-cursor width100p border-none"
+                                onClick="convert()">Convert</button>
+                        </div>
+
+                        <!-- Validation errors will be renndered here -->
+                        <h3 class="errorMsg" id="conversionError"></h3>
                     </div>
-                    <div>
-                        <label for="">to:</label>
-                        <input type="text" value="U. S. Dollars / USD">
-                    </div>
-                    <div id="amountField">
-                        <label for="">amount:</label>
-                        <input type="text" value="200">
-                    </div>
-                </form>
+                </div>
             </div>
-        </section>   
-    </main> 
+
+            <!-- Calculation Result Div -->
+            <div id="resultContainer" class="displayFlex flexColumn flexCenter gap30">
+
+                <!-- Heading -->
+                <h1>Conversion Result:</h1>
+
+                <div class="container displayFlex flexColumn flexCenter gap20 padding30">
+
+                    <!-- Conversion amount will be renndered here -->
+                    <h2 class="text-darkCyan" id="conversionAmount"></h2>
+
+                    <div class="display-grid columns-2 gap20 width100p padding20 justify-content-between">
+                        <!-- Conversion exchange rate will be renndered here -->
+                        <span>Current Exchange Rate: </span><span id="exchangeRate"></span>
+
+                        <!-- Calculation timestamp -->
+                        <span>Calculation Time: </span><span id="timeStamp"></span>
+
+                        <!-- Last Exchange Rate Update will be rendered here -->
+                        <span>Last Exchange Rate Update: </span><span id="updateTime"></span>
+                    </div>
+                </div>
+
+                <!-- Back to calculation button - refresh page on button click -->
+                <button class="backBtn pointer-cursor background-transparent" onclick="window.location.reload()"><img
+                        src="assets/images/arrow-left-solid.svg" alt=""></button>
+            </div>
+
+        </section>
+    </main>
 
     <!-- Linked Javascript -->
     <script src="assets/js/main.js"></script>
 </body>
+
 </html>

@@ -1,23 +1,223 @@
-/* setting initial margin & padding */
-
+/* setting default styling for all html tags with universal selector */
 * {
-    margin: 0;
-    padding: 0;
-    list-style: none;
-    box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+  font-family: "Gill Sans", "Gill Sans MT", Calibri, "Trebuchet MS", sans-serif;
+  -webkit-box-sizing: border-box;
+  -moz-box-sizing: border-box;
+  -ms-box-sizing: border-box;
+  box-sizing: border-box;
 }
 
-/* Global CSS Variables */
-
+/* Declared global CSS Variables */
 :root {
- --cyan: #50EFD2;
- --cyanDark:#13A48A;
- --width100: 100vw;
- --height100: 100vh;
+  --cyan: #50efd2;
+  --cyanDark: #13a48a;
+  --width100: 100vw;
+  --height100: 100vh;
 }
 
+/* setting gradient background color for main */
 main {
-    background: linear-gradient(90deg,var(--cyan)50%,var(--cyanDark));
-    min-width: var(--width100);
-    min-height: var(--height100);
+  background: linear-gradient(to right, var(--cyan), var(--cyanDark));
+}
+
+/* setting main-height & min-width for section */
+main section {
+  min-width: var(--width100);
+  min-height: var(--height100);
+}
+
+.text-transform-capitalize {
+  text-transform: capitalize;
+}
+
+.text-darkCyan {
+    color: var(--cyanDark);
+}
+
+.displayFlex {
+  display: flex;
+}
+
+/* this class horizontally & vertically centers flex items */
+.flexCenter {
+  justify-content: center;
+  align-items: center;
+}
+
+/* this class horizontally centers flex items */
+.flexCenter-x {
+  justify-content: center;
+}
+
+/* this class vertically centers flex items */
+.flexCenter-y {
+  align-items: center;
+}
+
+/* this class will set flex direction to column (vertical) */
+.flexColumn {
+  flex-direction: column;
+}
+
+.container {
+  background-color: white;
+  padding: 20px 20px 10px 20px;
+  box-shadow: 0 8px 18px 12px #00000052;
+  border-radius: 20px;
+  -webkit-border-radius: 20px;
+  -moz-border-radius: 20px;
+  -ms-border-radius: 20px;
+  -o-border-radius: 20px;
+}
+
+#calculationContainer h1 {
+  font-family: Verdana, Geneva, Tahoma, sans-serif;
+  font-size: 2.1rem;
+}
+
+#calculationContainer label {
+  font-size: 1.5rem;
+  font-family: "Gill Sans", "Gill Sans MT", Calibri, "Trebuchet MS", sans-serif;
+}
+
+.row {
+  max-width: 350px;
+}
+
+.col {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.gap10 {
+  gap: 10px;
+}
+
+.gap20 {
+  gap: 20px;
+}
+
+.gap30 {
+  gap: 30px;
+}
+
+.padding20 {
+    padding: 20px;
+}
+
+.padding30 {
+    padding: 30px;
+}
+
+.width100p {
+  width: 100%;
+}
+
+.form-field {
+  padding: 8px;
+  font-size: 1rem;
+  outline: none;
+  border: none;
+  border-radius: 8px;
+  -webkit-border-radius: 8px;
+  -moz-border-radius: 8px;
+  -ms-border-radius: 8px;
+  -o-border-radius: 8px;
+}
+
+.shadow-glow {
+  box-shadow: 0px 0px 6px 5px #00000052;
+}
+
+.conversion-limit {
+  font-size: 1.5rem;
+  color: #444;
+  font-weight: 600;
+}
+
+.btn {
+  color: white;
+  font-size: 1.8rem;
+  font-weight: 600;
+  background-color: var(--cyanDark);
+  padding: 10px;
+  border-radius: 8px;
+  -webkit-border-radius: 8px;
+  -moz-border-radius: 8px;
+  -ms-border-radius: 8px;
+  -o-border-radius: 8px;
+}
+
+.pointer-cursor {
+    cursor: pointer;
+}
+
+.border-none {
+  border: none;
+}
+
+#input_currency {
+  font-size: 2rem;
+  border-bottom: 4px solid var(--cyanDark);
+  background-color: transparent;
+  margin-top: 12px;
+  border-radius: 0;
+  -webkit-border-radius: 0;
+  -moz-border-radius: 0;
+  -ms-border-radius: 0;
+  -o-border-radius: 0;
+}
+
+.errorMsg {
+  color: red;
+  font-weight: 600;
+  margin-bottom: 10px;
+  text-align: center;
+}
+
+#resultContainer h1, 
+#resultContainer h2 {
+    font-size: 2rem;
+    font-family: 'Franklin Gothic Medium', 'Arial Narrow', Arial, sans-serif;
+}
+
+#resultContainer .container {
+    min-width: 500px;
+    max-width: 650px;
+}
+
+#resultContainer span {
+    font-size: 1.5rem;
+    font-weight: 800;
+    font-family: 'Courier New', Courier, monospace;
+}
+
+.display-grid {
+    display: grid;
+}
+
+.columns-2 {
+    grid-template-columns: 40% 55%;
+}
+
+.justify-content-between {
+    justify-content: space-between;
+}
+
+.background-transparent {
+    background-color: transparent;
+}
+
+.backBtn {
+    padding: 9px 12px;
+    border: 4px solid black;
+    border-radius: 100%;
+}
+
+.backBtn img {
+    width: 20px;
 }

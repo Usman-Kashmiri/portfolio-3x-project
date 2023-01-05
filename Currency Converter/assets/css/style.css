@@ -25,7 +25,7 @@ main {
 
 /* setting main-height & min-width for section */
 main section {
-  min-width: var(--width100);
+  max-width: var(--width100);
   min-height: var(--height100);
 }
 
